@@ -146,7 +146,7 @@ Credentials live in **`insurance-portal-db-credentials`**. Lambda reads them via
 
 - Lambda logs to **`/aws/lambda/process-uploaded-file`** (Content-Type, secret fetch, successful insert). No secret values are logged.
 - EC2 logs stay on each instance at `/var/log/insurance-portal.log`, because the CloudWatch agent is not installed, and are lost when an instance is terminated.
-- Beyond the bonus dashboard and alarm in [`Bonus_Points.md`](Bonus_Points.md), there are no alarms on ALB 5xx, Lambda errors, or EC2 health.
+- Beyond the bonus dashboard and alarm in [`Bonus_Points.md`](Bonus_Points.md).
 
 ---
 
