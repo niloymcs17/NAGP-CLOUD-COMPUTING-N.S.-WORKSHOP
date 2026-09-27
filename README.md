@@ -2,6 +2,8 @@
 
 A document upload portal on AWS in **us-east-1** across two Availability Zones, built for the NAGP Cloud Computing workshop assignment.
 
+**GitHub repository:** [niloymcs17/NAGP-CLOUD-COMPUTING-N.S.-WORKSHOP](https://github.com/niloymcs17/NAGP-CLOUD-COMPUTING-N.S.-WORKSHOP.git)
+
 A user uploads a file to a Flask app on EC2, behind an Application Load Balancer and an Auto Scaling group, which stores it in S3. The upload event triggers a Lambda function that reads the file's metadata, fetches database credentials from Secrets Manager, and writes a record to a private RDS MySQL database.
 
 ```mermaid
