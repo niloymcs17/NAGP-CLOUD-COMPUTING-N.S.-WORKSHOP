@@ -129,12 +129,6 @@ Credentials live in **`insurance-portal-db-credentials`**. Lambda reads them via
 - The bonus requires *fetching* a secret and showing it in the Lambda logs, not rotating passwords.
 - Rotation needs a rotation Lambda, a schedule, IAM, and usually VPC access to RDS — complexity, failure modes, and cost beyond the MVP.
 
-**If it were enabled**
-
-- AWS would change the RDS master password on a schedule and update `AWSCURRENT`.
-- Lambda would still call `GetSecretValue`, needing no code change for rotation itself.
-- But `lambda/lambda_function.py` caches credentials in `_db_creds_cache` for the life of a warm execution environment, so **warm** invocations could keep using the old password and fail MySQL auth until a **cold start** refreshes the cache.
-- Production would re-fetch on connection failure, stop caching, or shorten container lifetime. That being out of scope, rotation stays off rather than risking brief upload failures after each rotation.
 
 ---
 
