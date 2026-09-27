@@ -10,7 +10,7 @@ Temporary access for setup and debugging. The running design stays closed: RDS i
 | RDS security group | `rds-sg` |
 | RDS instance | `insurance-portal-db` |
 | Database name | `insurance_portal` |
-| Master username | `Niloyasd` |
+| Master username | `<UserName>` |
 | Secret name | `insurance-portal-db-credentials` |
 | EC2 Instance Connect range | `18.206.107.24/29` |
 
@@ -76,7 +76,7 @@ Copy the endpoint from **RDS → `insurance-portal-db` → Connectivity & securi
 
 ```bash
 sudo dnf install -y mariadb105
-mysql -h YOUR_RDS_ENDPOINT -P 3306 -u Niloyasd -p
+mysql -h YOUR_RDS_ENDPOINT -P 3306 -u <UserName> -p
 ```
 
 `-p` goes last with nothing after it. At `Enter password:`, type the master password from **Secrets Manager → `insurance-portal-db-credentials` → Retrieve secret value** — characters do not appear as you type, and it should not be pasted into the command.
@@ -86,7 +86,7 @@ mysql -h YOUR_RDS_ENDPOINT -P 3306 -u Niloyasd -p
 The initial database name cannot be changed after the RDS instance is created, so both database and table come from SQL. Run `code/database/schema.sql`, which is idempotent and safe to re-run:
 
 ```bash
-mysql -h YOUR_RDS_ENDPOINT -u Niloyasd -p < schema.sql
+mysql -h YOUR_RDS_ENDPOINT -u <UserName> -p < schema.sql
 ```
 
 If the file is not on the instance, paste its contents into the MySQL session instead. Then `SHOW DATABASES;` and `SELECT * FROM uploaded_files ORDER BY upload_timestamp DESC LIMIT 5;` confirm the schema and any rows Lambda has written.
@@ -95,7 +95,7 @@ If the file is not on the instance, paste its contents into the MySQL session in
 
 | What you see | Cause | Fix |
 |---|---|---|
-| `Access denied for user 'Niloyasd' ... (using password: NO)` | No password was sent | Re-run with `-p` and type the password at the prompt; a blank Enter causes this |
+| `Access denied for user '<UserName>' ... (using password: NO)` | No password was sent | Re-run with `-p` and type the password at the prompt; a blank Enter causes this |
 | `Access denied ... (using password: YES)` | Username or password does not match the RDS master user | Use the values from the secret, as set when the database was created — not a different secret |
 | Connection times out | `rds-sg` has no rule from `ec2-app-sg`, or the database ACL does not allow this subnet | Add the 3306 rule; confirm the instance private IP is inside `10.0.11.0/24` or `10.0.12.0/24` |
 
